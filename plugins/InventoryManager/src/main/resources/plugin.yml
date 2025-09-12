@@ -1,0 +1,21 @@
+name: InventoryManager
+version: 1.0.0
+main: com.inventorymanager.InventoryManagerPlugin
+api-version: 1.20
+author: YourName
+description: Plugin para gestionar inventarios con MongoDB
+
+commands:
+  inventory:
+    description: Comandos de gestión de inventario
+    usage: /inventory <reload|save|load>
+    permission: inventorymanager.admin
+  giveitem:
+    description: Agregar items a jugadores
+    usage: /giveitem <jugador> <item> <cantidad>
+    permission: inventorymanager.admin
+
+permissions:
+  inventorymanager.admin:
+    description: Permite usar comandos de administración del plugin
+    default: op

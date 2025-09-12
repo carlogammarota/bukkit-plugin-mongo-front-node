@@ -1,0 +1,53 @@
+# Minecraft Server
+world/
+logs/
+
+craftbukkit-*.jar
+server.jar
+eula.txt
+banned-*.json
+ops.json
+usercache.json
+whitelist.json
+
+world_nether
+world_the_end
+world_overworld
+world_spawn
+world_structures
+world_the_nether
+world_the_end
+world_the_overworld
+world_the_spawn
+world_the_structures
+world_the_nether
+world_the_end
+world_the_overworld
+world_the_spawn
+world_the_structures
+
+# Node.js
+web-server/node_modules/
+web-server/npm-debug.log*
+web-server/yarn-debug.log*
+web-server/yarn-error.log*
+
+# Java/Maven
+plugins/InventoryManager/target/
+plugins/InventoryManager/.classpath
+plugins/InventoryManager/.project
+plugins/InventoryManager/.settings/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
