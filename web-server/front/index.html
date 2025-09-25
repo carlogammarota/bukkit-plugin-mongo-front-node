@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CraftAR - Tu Servidor de Minecraft</title>
+    <meta name="description" content="CraftAR es el mejor servidor de Minecraft en Argentina. Únete a nuestra comunidad y disfruta de una experiencia única con mods, eventos y mucho más.">
+    <meta name="keywords" content="minecraft, servidor, argentina, craftar, gaming, comunidad">
+    <meta name="author" content="CraftAR Team">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://craftar.com/">
+    <meta property="og:title" content="CraftAR - Tu Servidor de Minecraft">
+    <meta property="og:description" content="CraftAR es el mejor servidor de Minecraft en Argentina. Únete a nuestra comunidad y disfruta de una experiencia única.">
+    <meta property="og:image" content="/assets/images/craftar-og.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://craftar.com/">
+    <meta property="twitter:title" content="CraftAR - Tu Servidor de Minecraft">
+    <meta property="twitter:description" content="CraftAR es el mejor servidor de Minecraft en Argentina. Únete a nuestra comunidad y disfruta de una experiencia única.">
+    <meta property="twitter:image" content="/assets/images/craftar-og.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'orbitron': ['Orbitron', 'monospace'],
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        'craftar': {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e'
+                        },
+                        'minecraft': {
+                            'green': '#7CB342',
+                            'dark-green': '#558B2F',
+                            'brown': '#8D6E63',
+                            'dark-brown': '#5D4037'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px #0ea5e9, 0 0 10px #0ea5e9, 0 0 15px #0ea5e9' },
+                            '100%': { boxShadow: '0 0 10px #0ea5e9, 0 0 20px #0ea5e9, 0 0 30px #0ea5e9' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-gray-900 text-white">
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

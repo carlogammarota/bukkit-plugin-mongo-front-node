@@ -336,58 +336,60 @@ public class MongoDBManager {
                 JsonArray pendingItems = gson.fromJson(itemsJson, JsonArray.class);
                 
                 int itemsProcessed = 0;
+                boolean hasRemainingItems = false;
                 
                 for (int i = 0; i < pendingItems.size(); i++) {
                     JsonObject itemJson = pendingItems.get(i).getAsJsonObject();
                     String materialName = itemJson.get("material").getAsString();
                     int amount = itemJson.get("amount").getAsInt();
                     
-                    try {
-                        Material material = Material.valueOf(materialName);
-                        ItemStack item = new ItemStack(material, amount);
-                        
-                        // Intentar agregar el item
-                        java.util.HashMap<Integer, ItemStack> notAdded = player.getInventory().addItem(item);
-                        
-                        if (notAdded.isEmpty()) {
-                            itemsProcessed += amount;
-                        } else {
-                            // Si no se pudo agregar todo, mantener el resto como pendiente
-                            int remainingAmount = notAdded.values().iterator().next().getAmount();
-                            itemJson.addProperty("amount", remainingAmount);
+                    // Solo procesar si hay cantidad pendiente
+                    if (amount > 0) {
+                        try {
+                            Material material = Material.valueOf(materialName);
+                            ItemStack item = new ItemStack(material, amount);
+                            
+                            // Intentar agregar el item
+                            java.util.HashMap<Integer, ItemStack> notAdded = player.getInventory().addItem(item);
+                            
+                            if (notAdded.isEmpty()) {
+                                // Item agregado completamente - marcar como procesado
+                                itemsProcessed += amount;
+                                itemJson.addProperty("amount", 0); // Marcar como procesado
+                            } else {
+                                // Si no se pudo agregar todo, mantener el resto como pendiente
+                                int remainingAmount = notAdded.values().iterator().next().getAmount();
+                                int processedAmount = amount - remainingAmount;
+                                itemsProcessed += processedAmount;
+                                itemJson.addProperty("amount", remainingAmount);
+                                hasRemainingItems = true;
+                            }
+                        } catch (Exception e) {
+                            // Ignorar items inválidos
+                            itemJson.addProperty("amount", 0); // Marcar como procesado para evitar reintentos
                         }
-                    } catch (Exception e) {
-                        // Ignorar items inválidos
                     }
                 }
                 
                 if (itemsProcessed > 0) {
                     player.sendMessage("§a[InventoryManager] Se procesaron " + itemsProcessed + " items pendientes!");
+                }
+                
+                // Eliminar el documento de items pendientes si se procesaron todos
+                if (!hasRemainingItems) {
+                    pendingItemsCollection.deleteOne(Filters.eq("uuid", player.getUniqueId().toString()));
+                    player.sendMessage("§a[InventoryManager] Todos los items pendientes han sido entregados.");
+                } else {
+                    // Actualizar con los items restantes
+                    Document updatedDoc = new Document("uuid", player.getUniqueId().toString())
+                            .append("items", pendingItems.toString())
+                            .append("lastUpdated", System.currentTimeMillis());
                     
-                    // Eliminar el documento de items pendientes si se procesaron todos
-                    boolean allProcessed = true;
-                    for (int i = 0; i < pendingItems.size(); i++) {
-                        JsonObject itemJson = pendingItems.get(i).getAsJsonObject();
-                        if (itemJson.get("amount").getAsInt() > 0) {
-                            allProcessed = false;
-                            break;
-                        }
-                    }
-                    
-                    if (allProcessed) {
-                        pendingItemsCollection.deleteOne(Filters.eq("uuid", player.getUniqueId().toString()));
-                    } else {
-                        // Actualizar con los items restantes
-                        Document updatedDoc = new Document("uuid", player.getUniqueId().toString())
-                                .append("items", pendingItems.toString())
-                                .append("lastUpdated", System.currentTimeMillis());
-                        
-                        pendingItemsCollection.replaceOne(
-                            Filters.eq("uuid", player.getUniqueId().toString()),
-                            updatedDoc,
-                            new ReplaceOptions().upsert(true)
-                        );
-                    }
+                    pendingItemsCollection.replaceOne(
+                        Filters.eq("uuid", player.getUniqueId().toString()),
+                        updatedDoc,
+                        new ReplaceOptions().upsert(true)
+                    );
                 }
             }
         } catch (Exception e) {

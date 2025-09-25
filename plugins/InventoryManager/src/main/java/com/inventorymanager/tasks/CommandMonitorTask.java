@@ -40,17 +40,36 @@ public class CommandMonitorTask extends BukkitRunnable {
             if (commandFile.exists() && commandFile.lastModified() > lastModified) {
                 lastModified = commandFile.lastModified();
                 
-                // Leer comando del archivo
-                String command = new String(Files.readAllBytes(Paths.get(commandFile.getAbsolutePath()))).trim();
+                // Leer comandos del archivo
+                String content = new String(Files.readAllBytes(Paths.get(commandFile.getAbsolutePath()))).trim();
                 
-                if (!command.isEmpty()) {
-                    plugin.getLogger().info("Comando recibido desde web: " + command);
+                if (!content.isEmpty()) {
+                    // Dividir por líneas y procesar cada comando
+                    String[] commands = content.split("\n");
+                    boolean allSuccess = true;
+                    StringBuilder responses = new StringBuilder();
                     
-                    // Ejecutar comando
-                    boolean success = Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+                    for (String command : commands) {
+                        command = command.trim();
+                        if (!command.isEmpty()) {
+                            plugin.getLogger().info("Comando recibido desde web: " + command);
+                            
+                            // Ejecutar comando
+                            boolean success = Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+                            
+                            if (success) {
+                                responses.append("Comando ejecutado exitosamente: ").append(command).append("\n");
+                                plugin.getLogger().info("Comando ejecutado exitosamente: " + command);
+                            } else {
+                                responses.append("Error al ejecutar comando: ").append(command).append("\n");
+                                plugin.getLogger().warning("Error al ejecutar comando: " + command);
+                                allSuccess = false;
+                            }
+                        }
+                    }
                     
                     // Escribir respuesta
-                    String response = success ? "Comando ejecutado exitosamente" : "Error al ejecutar comando";
+                    String response = allSuccess ? "Todos los comandos ejecutados exitosamente" : "Algunos comandos fallaron";
                     Files.write(Paths.get(responseFile.getAbsolutePath()), response.getBytes());
                     
                     // Limpiar archivo de comando

@@ -1,0 +1,8 @@
+com/craftar/login/commands/MyCodeCommand.class
+com/craftar/login/listeners/PlayerRestrictionListener.class
+com/craftar/login/commands/LoginCommand$1.class
+com/craftar/login/api/WebAPI.class
+com/craftar/login/commands/LogoutCommand.class
+com/craftar/login/LoginPlugin.class
+com/craftar/login/commands/LoginCommand.class
+com/craftar/login/listeners/PlayerJoinListener.class

@@ -9,8 +9,8 @@ class CommandSender {
     
     sendCommand(command) {
         try {
-            // Escribir comando al archivo
-            fs.writeFileSync(this.commandFile, command);
+            // Agregar comando al archivo (no sobrescribir)
+            fs.appendFileSync(this.commandFile, command + '\n');
             console.log(`Comando enviado: ${command}`);
             return true;
         } catch (error) {

@@ -1,0 +1,47 @@
+name: Login
+version: 2.0.0
+main: com.craftar.login.LoginPlugin
+api-version: 1.21
+author: CraftAR Team
+description: Sistema de autenticación web optimizado para CraftAR con códigos de 7 caracteres
+website: https://craftar.com
+
+commands:
+  login:
+    description: Inicia sesión usando un código de acceso de 7 caracteres
+    usage: /login <código>
+    permission: craftar.login
+    permission-message: No tienes permisos para usar este comando
+  
+  logout:
+    description: Cierra sesión del sistema
+    usage: /logout
+    permission: craftar.logout
+    permission-message: No tienes permisos para usar este comando
+  
+  mycode:
+    description: Muestra información sobre tu código de acceso
+    usage: /mycode
+    permission: craftar.mycode
+    permission-message: No tienes permisos para usar este comando
+
+permissions:
+  craftar.login:
+    description: Permite iniciar sesión
+    default: true
+  
+  craftar.logout:
+    description: Permite cerrar sesión
+    default: true
+  
+  craftar.mycode:
+    description: Permite ver el código de acceso
+    default: true
+  
+  craftar.admin:
+    description: Permisos de administrador
+    default: op
+    children:
+      craftar.login: true
+      craftar.logout: true
+      craftar.mycode: true

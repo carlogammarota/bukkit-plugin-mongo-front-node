@@ -1,0 +1,28 @@
+{
+  "name": "craftar-frontend",
+  "version": "1.0.0",
+  "description": "Frontend Vue 3 para CraftAR - Servidor de Minecraft",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "compression": "^1.7.4",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0",
+    "http-proxy-middleware": "^3.0.5",
+    "pinia": "^2.1.7",
+    "pinia-plugin-persistedstate": "^3.2.1",
+    "socket.io-client": "^4.7.4",
+    "vue": "^3.4.0",
+    "vue-router": "^4.2.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.5.2",
+    "terser": "^5.44.0",
+    "vite": "^5.0.8"
+  }
+}
