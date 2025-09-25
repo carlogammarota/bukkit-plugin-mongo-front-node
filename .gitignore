@@ -26,6 +26,8 @@ world_the_overworld
 world_the_spawn
 world_the_structures
 
+web-server/front/node_modules/
+
 # Node.js
 web-server/node_modules/
 web-server/npm-debug.log*

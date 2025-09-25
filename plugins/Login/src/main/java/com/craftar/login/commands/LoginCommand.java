@@ -93,7 +93,7 @@ public class LoginCommand implements CommandExecutor {
                         // Mensaje de bienvenida
                         player.sendMessage("");
                         player.sendMessage(ChatColor.GOLD + "🎉 " + ChatColor.BOLD + "¡Bienvenido a CraftAR!");
-                        player.sendMessage(ChatColor.AQUA + "🔑 Usa " + ChatColor.WHITE + "/login " + accessCode + ChatColor.AQUA + " cada vez que entres");
+                        player.sendMessage(ChatColor.AQUA + "🔑 Tu código actual: " + ChatColor.WHITE + accessCode + ChatColor.AQUA + " (válido por 5 minutos)");
                         player.sendMessage(ChatColor.YELLOW + "🛒 Tienda: " + ChatColor.WHITE + "https://craftar.com/shop");
                         player.sendMessage(ChatColor.GRAY + "💡 Comando: " + ChatColor.WHITE + "/logout" + ChatColor.GRAY + " para cerrar sesión");
                         

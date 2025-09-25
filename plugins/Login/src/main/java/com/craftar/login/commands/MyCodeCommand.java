@@ -42,7 +42,7 @@ public class MyCodeCommand implements CommandExecutor {
             player.sendMessage(ChatColor.WHITE + "https://craftar.com/dashboard");
             player.sendMessage("");
             player.sendMessage(ChatColor.GRAY + "💡 El código es de 7 caracteres alfanuméricos");
-            player.sendMessage(ChatColor.GRAY + "💡 Es permanente y lo necesitarás cada vez que entres");
+            player.sendMessage(ChatColor.GRAY + "💡 Se genera cada 5 minutos y es único para cada sesión");
             player.sendMessage(ChatColor.GRAY + "💡 Guárdalo en un lugar seguro");
         } else {
             player.sendMessage(ChatColor.RED + "❌ No se pudo obtener la información de tu sesión.");
