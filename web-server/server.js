@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const http = require('http');
 const socketIo = require('socket.io');
+const WebSocket = require('ws');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mercadopago = require('mercadopago');
@@ -17,6 +18,7 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const crypto = require('crypto');
 const CommandSender = require('./command-sender');
+const StatsIntegration = require('./stats-integration');
 
 const app = express();
 const server = http.createServer(app);
@@ -2266,12 +2268,36 @@ app.post('/api/add-item', authenticateToken, requireAdmin, async (req, res) => {
 });
 
 
+// Inicializar integración de estadísticas
+const statsIntegration = new StatsIntegration(io);
+
+// Inicializar conexión con plugin de estadísticas
+statsIntegration.connectToMinecraft(8081);
+
 // Socket.IO para comunicación en tiempo real
 io.on('connection', (socket) => {
     console.log('Cliente conectado:', socket.id);
     
     socket.on('disconnect', () => {
         console.log('Cliente desconectado:', socket.id);
+    });
+    
+    // Unirse a sala de estadísticas
+    socket.on('join-stats-room', () => {
+        socket.join('stats-room');
+        console.log('Cliente se unió a la sala de estadísticas');
+        
+        // Enviar datos actuales si están disponibles
+        const currentStats = statsIntegration.getStatsData();
+        if (currentStats) {
+            socket.emit('stats-update', currentStats);
+        }
+    });
+    
+    // Salir de sala de estadísticas
+    socket.on('leave-stats-room', () => {
+        socket.leave('stats-room');
+        console.log('Cliente salió de la sala de estadísticas');
     });
     
     socket.on('request-update', async () => {
@@ -2650,7 +2676,42 @@ app.get('/api/coupons/:code', authenticateToken, async (req, res) => {
     }
 });
 
-// Configuración para SPA (Single Page Application)
+// Esta ruta debe ir al final, después de todas las rutas de la API
+
+// La integración de estadísticas ya está inicializada arriba
+
+// WebSocket para estadísticas en tiempo real
+const statsWebSocket = new WebSocket.Server({ 
+    port: 8082,
+    path: '/stats-ws'
+});
+
+statsWebSocket.on('connection', (ws) => {
+    console.log('📊 Cliente conectado a estadísticas en tiempo real');
+    statsIntegration.addClient(ws);
+});
+
+// Rutas de estadísticas
+app.get('/api/stats', (req, res) => {
+    const statsData = statsIntegration.getStatsData();
+    const connectionStatus = statsIntegration.getConnectionStatus();
+    
+    res.json({
+        success: true,
+        data: statsData,
+        connection: connectionStatus
+    });
+});
+
+app.get('/api/stats/status', (req, res) => {
+    const connectionStatus = statsIntegration.getConnectionStatus();
+    res.json({
+        success: true,
+        ...connectionStatus
+    });
+});
+
+// Configuración para SPA (Single Page Application) - DEBE IR AL FINAL
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'front/dist/index.html'));
 });
@@ -2658,4 +2719,6 @@ app.get('*', (req, res) => {
 const PORT = process.env.PORT || 3004;
 server.listen(PORT, () => {
     console.log(`Servidor web ejecutándose en http://localhost:${PORT}`);
+    console.log(`📊 Estadísticas disponibles en: http://localhost:${PORT}/api/stats`);
+    console.log(`🔌 WebSocket de estadísticas en: ws://localhost:8082/stats-ws`);
 });

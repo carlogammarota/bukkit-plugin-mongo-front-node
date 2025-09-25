@@ -178,8 +178,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="order in orders" :key="order._id" class="border-b border-gray-800 hover:bg-gray-800/50">
-                  <td class="py-3 px-4 font-mono text-sm">#{{ order._id.slice(-8) }}</td>
+                <tr v-for="order in orders" :key="order._id || order.id" class="border-b border-gray-800 hover:bg-gray-800/50">
+                  <td class="py-3 px-4 font-mono text-sm">#{{ order._id ? order._id.slice(-8) : 'N/A' }}</td>
                   <td class="py-3 px-4">{{ order.userId.username }}</td>
                   <td class="py-3 px-4 font-semibold text-craftar-400">${{ order.totalAmount.toLocaleString('es-AR') }}</td>
                   <td class="py-3 px-4">

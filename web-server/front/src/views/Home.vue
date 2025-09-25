@@ -37,24 +37,9 @@
           </button>
         </div>
         
-        <!-- Server Stats -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-          <div class="text-center">
-            <div class="text-3xl font-bold text-craftar-400 mb-2">24/7</div>
-            <div class="text-gray-400">Servidor Activo</div>
-          </div>
-          <div class="text-center">
-            <div class="text-3xl font-bold text-minecraft-green mb-2">{{ onlinePlayers }}</div>
-            <div class="text-gray-400">Jugadores Online</div>
-          </div>
-          <div class="text-center">
-            <div class="text-3xl font-bold text-yellow-500 mb-2">99.9%</div>
-            <div class="text-gray-400">Uptime</div>
-          </div>
-          <div class="text-center">
-            <div class="text-3xl font-bold text-red-500 mb-2">1.20.4</div>
-            <div class="text-gray-400">Versión</div>
-          </div>
+        <!-- Server Stats Widget -->
+        <div class="max-w-6xl mx-auto">
+          <StatsWidget />
         </div>
       </div>
       
@@ -319,12 +304,12 @@
 import { ref, onMounted } from 'vue'
 import { useShopStore } from '../stores/shop'
 import { useAuthStore } from '../stores/auth'
+import StatsWidget from '../components/StatsWidget.vue'
 import axios from 'axios'
 
 const shopStore = useShopStore()
 const authStore = useAuthStore()
 const featuresSection = ref(null)
-const onlinePlayers = ref(0)
 const featuredProducts = ref([])
 const showCart = ref(false)
 
@@ -360,9 +345,6 @@ const handleImageError = (event) => {
 
 onMounted(async () => {
   try {
-    // Simular jugadores online
-    onlinePlayers.value = Math.floor(Math.random() * 50) + 20
-    
     // Cargar productos destacados
     console.log('Cargando productos destacados...')
     const result = await shopStore.fetchProducts()

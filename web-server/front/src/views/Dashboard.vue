@@ -270,10 +270,10 @@
               </router-link>
             </div>
             <div v-else class="space-y-4">
-              <div v-for="order in recentOrders" :key="order._id" class="border border-gray-700 rounded-lg p-4">
+              <div v-for="order in recentOrders" :key="order._id || order.id" class="border border-gray-700 rounded-lg p-4">
                 <div class="flex items-center justify-between mb-3">
                   <div>
-                    <h3 class="text-lg font-semibold">Orden #{{ order._id.slice(-8) }}</h3>
+                    <h3 class="text-lg font-semibold">Orden #{{ order._id ? order._id.slice(-8) : 'N/A' }}</h3>
                     <p class="text-gray-400 text-sm">{{ formatDate(order.createdAt) }}</p>
                   </div>
                   <div class="text-right">

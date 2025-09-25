@@ -56,10 +56,10 @@
         </div>
 
         <div v-else class="space-y-4">
-          <div v-for="order in orders" :key="order._id" class="border border-gray-700 rounded-lg p-6">
+          <div v-for="order in orders" :key="order._id || order.id" class="border border-gray-700 rounded-lg p-6">
             <div class="flex items-center justify-between mb-4">
               <div>
-                <h3 class="text-lg font-semibold">Orden #{{ order._id.slice(-8) }}</h3>
+                <h3 class="text-lg font-semibold">Orden #{{ order._id ? order._id.slice(-8) : 'N/A' }}</h3>
                 <p class="text-gray-400 text-sm">{{ formatDate(order.createdAt) }}</p>
               </div>
               <div class="text-right">
@@ -376,7 +376,7 @@ const processDeposit = async () => {
 }
 
 const setupSocket = () => {
-  socket.value = io('https://96c541aba430.ngrok-free.app')
+  socket.value = io('https://cd2426bdec3d.ngrok-free.app')
   
   socket.value.on('connect', () => {
     console.log('Conectado al socket')
@@ -387,7 +387,7 @@ const setupSocket = () => {
   socket.value.on('order-updated', (data) => {
     console.log('Orden actualizada:', data)
     // Actualizar la orden específica
-    const orderIndex = orders.value.findIndex(order => order._id === data.orderId)
+    const orderIndex = orders.value.findIndex(order => (order._id || order.id) === data.orderId)
     if (orderIndex !== -1) {
       orders.value[orderIndex].status = data.status
     }
